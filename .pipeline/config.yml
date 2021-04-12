@@ -1,3 +1,4 @@
+  
 ###
 # This file configures the project "Piper" pipeline of your project.
 # For a reference of the configuration concept and available options, please have a look into its documentation.
@@ -10,71 +11,98 @@
 
 
 
- ### General project setup
- general:
-   unsafeMode: false
-   projectName: 'cloud-cap-s4ems-bp'
-   pipeline: 'sap-cloud-sdk'
+### General project setup
+general:
+  unsafeMode: false
+  projectName: 'cloud-cap-s4ems-bp'
+  pipeline: 'sap-cloud-sdk'    # this line is mandatory
+#   buildTool: 'mta'
 
- ### Step-specific configuration
- steps:
- artifactPrepareVersion:
-     buildTool: 'mta'
- npmExecute:
-     dockerImage: 'ppiper/node-browsers:v2'
- cloudFoundryDeploy:
-   cloudFoundry:
-     credentialsId:'cloud-credentials'
-     apiEndpoint:'https://api.cf.eu10.hana.ondemand.com'
-     org:'SFMissionAkankshaCw14'
-     space:'dev
-   mtaDeployParameters: '-f --version-rule ALL'
- sapNexusStage:
-     stagingProfile: 'integration'
-     repositoryFormat: 'npm'
- sapNexusUploadArtifacts:
-     packaging: 'mtar'
-     buildDescriptorFile: 'mta.yaml'
-     uploadFile: 'cloud-sf-extension-cap-sample_1.0.0.mtar'
-     artifactType: 'mta'
- mtaBuild:
-     mtaBuildTool: "cloudMbt"
+### Step-specific configuration
+steps:
+  artifactPrepareVersion:
+    buildTool: 'mta'
+    npmExecute:
+    dockerImage: 's4sdk/docker-node-browsers:v15'
+  npmExecuteLint:
+    failOnError: true
+  cloudFoundryDeploy:
+    cloudFoundry:
+      credentialsId: 'cloud-credentials'
+      apiEndpoint: 'https://api.cf.eu10.hana.ondemand.com'    # for example, https://api.cf.eu10.hana.ondemand.com
+      org: 'SFMissionAkankshaCw14'
+      space: 'dev'
+    mtaDeployParameters: '-f --version-rule ALL'
+  sapNexusStage:
+    stagingProfile: 'integration'
+    repositoryFormat: 'npm'
+  sapNexusUploadArtifacts:
+    packaging: 'mtar'
+    buildDescriptorFile: 'mta.yaml'
+    uploadFile: 'BusinessPartnerValidation_1.0.0.mtar'
+    artifactType: 'mta'
+  mtaBuild:
+    mtaBuildTool: "cloudMbt"
 
+### Stage-specific configuration
+stages:
+  Release:
+    cloudFoundryDeploy: true
+  Build:
+    npmExecuteLint: true  
+  
+#   npmAudit:    This is no longer supported in Version 1.0
+#     auditedAdvisories:
+#     # high
+#       - 550   
+#       - 593
+#       - 1184
+#       - 755
+#       - 1065 
+#       - 1164 
+#       - 1316 
+#       - 1324 
+#       - 1325 
+#     # moderate
+#       - 535
+#       - 1300 
+      
+#  backendIntegrationTests:
+ #   createHdiContainer: true
+  #  cloudFoundry:
+   #   org: 'referenceappscf'
+    #  space: 'SF_CAP'
+     # apiEndpoint: 'https://api.cf.eu10.hana.ondemand.com'
+      #credentialsId: 'cfdeployuser'
 
- ### Stage-specific configuration
- stages:
-    Release:
-       CloudFoundryDeploy: true
-    Build:
-       npmExecuteLint: true 
-         
-#  npmAudit:
-#      auditedAdvisories:
-#      # high
-#      - 550  
-#      - 593
-#      - 1184
-#      - 755
-#      - 1065
-#      - 1164
-#      - 1316
-#      - 1324
-#      - 1325
-#      # moderate
-#      - 535
-#      - 1300
- 
-#  lint:
-#      ui5BestPractices:
-#      failThreshold:
-#          error: 100
-#          warning: 500
-#          info: 1000
-     
-#  productionDeployment:
-#      cfTargets:
-#      - org:'SFMissionAkankshaCw14'
-#             space:'dev'
-#             appName:'cloud-sf-extension-cap-sample'
-#             apiEndpoint:'https://api.cf.eu10.hana.ondemand.com'
-#             credentialsId:'cloud-credentials'
+#   lint:
+#     ui5BestPractices:
+#       failThreshold:
+#         error: 100
+#         warning: 500
+#         info: 1000
+  
+#   Release:
+#     cfTargets:
+#      - org: 'EngSrvCloud_ecccw14'
+#        space: 'dev'
+#        apiEndpoint: 'https://api.cf.sap.hana.ondemand.com'
+#        appName: 'myAppName'
+#        manifest: 'manifest.yml'
+#        credentialsId: 'global'
+
+        
+  #endToEndTests:
+    #cfTargets:
+     # - org: 'referenceappscf'
+      #  space: 'SF_CAP'
+       # apiEndpoint: 'https://api.cf.eu10.hana.ondemand.com'
+        #credentialsId: 'cfdeployuser'
+    #appUrls:
+     # - url: 'https://referenceappscf-sf-cap-media-server-srv.cfapps.eu10.hana.ondemand.com'
+      #  credentialId: 'cfdeployuser'
+
+#  Integration:
+#    credentials:
+#      - alias: 'mySystemAlias'
+#        credentialId: 'mySystemCredentialsId'
