@@ -1,11 +1,6 @@
 {
-<<<<<<< HEAD
     "emname": "emsf",
     "namespace": "referenceappscf/emsf/1909",
-=======
-    "emname": "SFMission",
-    "namespace": "abcorg/SFMission/123",
->>>>>>> 92e8633ca48381e289b0d685f6e9250f63cca5b8
     "version": "1.1.0",
     "options": {
         "management": true,
